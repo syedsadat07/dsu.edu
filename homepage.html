@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dayananda Sagar University — Home</title>
+  <meta name="description" content="Responsive college homepage inspired by DSU with rich animations and theme transitions. Single-file (HTML, CSS, JS) ready for GitHub." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --primary:#0b5fff;
+      --primary-2:#6a8cff;
+      --accent:#ff7a59;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --radius:14px;
+      --glass: rgba(255,255,255,0.6);
+      --text:#0f172a;
+      --grad-angle: 120deg;
+      --page-transition: 350ms;
+    }
+    [data-theme='dark']{
+      --primary:#6aa8ff;
+      --primary-2:#4b87ff;
+      --accent:#ff9b7a;
+      --bg:#061022;
+      --card:#071428;
+      --muted:#9aa6b2;
+      --text:#e6eef8;
+    }
+
+    /* Respect users who prefer reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      :root{--page-transition: 0ms}
+      *{animation:none !important;transition:none !important}
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:linear-gradient(var(--grad-angle),var(--bg),rgba(0,0,0,0.01));
+      transition:background var(--page-transition) ease,color var(--page-transition) ease;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.45;
+      overflow-x:hidden;
+    }
+
+    /* basic container */
+    .container{max-width:1220px;margin:0 auto;padding:28px}
+    a{color:inherit}
+    .muted{color:var(--muted)}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+
+    /* Header (animated) */
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;background:var(--card);backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(2,6,23,0.06);position:sticky;top:0;z-index:60;transition:padding 220ms ease,box-shadow 220ms ease}
+    .topbar.shrink{padding:10px 20px;box-shadow:0 8px 26px rgba(2,6,23,0.08)}
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:58px;height:58px;border-radius:12px;background:linear-gradient(135deg,var(--primary),var(--primary-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;letter-spacing:0.6px;transform-origin:center;transition:transform .45s cubic-bezier(.2,.9,.2,1)}
+    .logo.pulse{animation:logoPulse 2200ms infinite}
+    @keyframes logoPulse{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+
+    .brand h1{font-size:18px;margin:0}
+    nav{display:flex;gap:18px;align-items:center}
+    nav a{color:var(--muted);text-decoration:none;font-weight:600;padding:8px;border-radius:8px;position:relative}
+    nav a::after{content:'';position:absolute;left:8px;right:8px;bottom:2px;height:2px;border-radius:2px;background:transparent;transition:all 220ms ease}
+    nav a:hover{color:var(--text)}
+    nav a:hover::after{background:linear-gradient(90deg,var(--primary),var(--primary-2));}
+
+    .cta{background:linear-gradient(90deg,var(--primary),var(--primary-2));color:white;padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:800;box-shadow:0 8px 30px rgba(11,95,255,0.08);transform:translateZ(0);}
+    .hamb{display:none;border:0;background:transparent;font-size:22px}
+
+    /* theme toggle with animated icon */
+    .theme-toggle{display:flex;align-items:center;gap:8px;padding:6px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(0,0,0,0.02));}
+    .theme-toggle .icon{width:40px;height:40px;border-radius:999px;display:inline-grid;place-items:center;cursor:pointer;transition:all 320ms ease}
+    .theme-toggle .icon.sun{background:linear-gradient(90deg,#ffd36b,#ffb86b);box-shadow:0 6px 20px rgba(255,170,60,0.12)}
+    .theme-toggle .icon.moon{background:linear-gradient(90deg,#6aa8ff,#4b87ff);box-shadow:0 6px 20px rgba(74,120,255,0.12)}
+
+    /* Hero with parallax shapes and animated gradient */
+    .hero{display:grid;grid-template-columns:1fr 480px;gap:36px;padding:56px 28px 40px;align-items:center;position:relative}
+    .hero .bg-anim{position:absolute;inset:0;pointer-events:none;z-index:0}
+    .hero-left{position:relative;z-index:2}
+    .hero-left h2{font-size:48px;margin:0 0 12px;line-height:1.02;letter-spacing:-0.3px}
+    .hero-left p{color:var(--muted);font-size:16px;margin:0 0 18px}
+
+    .search-card{background:var(--card);padding:18px;border-radius:16px;box-shadow:0 18px 50px rgba(11,95,255,0.06);display:flex;flex-direction:column;gap:10px;transform:translateY(0);transition:transform 400ms cubic-bezier(.2,.9,.2,1)}
+    .search-row{display:flex;gap:8px}
+    .search-row input{flex:1;padding:12px;border-radius:10px;border:1px solid rgba(11,95,255,0.06);background:transparent;color:var(--text)}
+    .search-row button{padding:12px 16px;border-radius:10px;border:0;background:var(--accent);color:white;font-weight:700;cursor:pointer}
+
+    .hero-right{background-image:url('https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=8c8f6697f3f3c0b1a1f3b5ea19b1f1aa');background-size:cover;background-position:center;border-radius:16px;min-height:380px;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(10,20,40,0.06)}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,18,0.18),rgba(3,7,18,0.32));display:flex;flex-direction:column;justify-content:flex-end;padding:20px;color:white}
+    .stats{display:flex;gap:12px}
+    .stat{background:rgba(255,255,255,0.08);padding:10px;border-radius:10px;min-width:88px;text-align:center;transform:translateY(0);transition:transform 420ms ease}
+    .stat.pop{transform:translateY(-8px) scale(1.02)}
+
+    /* Cards grid with staggered entrance */
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .card{background:var(--card);padding:20px;border-radius:14px;box-shadow:0 10px 30px rgba(5,10,30,0.04);transition:transform .28s ease,box-shadow .28s ease,filter .28s ease;transform-origin:center}
+    .card:hover{transform:translateY(-8px) rotateX(4deg);box-shadow:0 26px 60px rgba(2,6,23,0.10);filter:brightness(1.02)}
+
+    /* News / Events */
+    .grid-2{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+    .news-item{display:flex;gap:12px;align-items:flex-start}
+    .news-item img{width:120px;height:80px;object-fit:cover;border-radius:8px}
+
+    /* Footer */
+    footer{background:linear-gradient(180deg,var(--card),transparent);padding:40px 24px;border-top-left-radius:24px;border-top-right-radius:24px;margin-top:40px}
+    .footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+
+    /* Animations */
+    .fade-in{opacity:0;transform:translateY(12px);animation:fadeIn .9s ease forwards}
+    .fade-in.stagger-1{animation-delay:.06s}
+    .fade-in.stagger-2{animation-delay:.14s}
+    .fade-in.stagger-3{animation-delay:.22s}
+    @keyframes fadeIn{to{opacity:1;transform:none}}
+
+    .float{animation:floatY 6s ease-in-out infinite}
+    @keyframes floatY{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+
+    .tilt{transform-origin:center;transition:transform 320ms ease}
+
+    .marquee{overflow:hidden;white-space:nowrap}
+    .marquee span{display:inline-block;padding-left:100%;animation:marquee 14s linear infinite}
+    @keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
+
+    /* Responsive */
+    @media (max-width:1100px){
+      .hero{grid-template-columns:1fr}
+      .cards{grid-template-columns:repeat(2,1fr)}
+      .grid-2{grid-template-columns:1fr}
+    }
+    @media (max-width:640px){
+      nav{display:none}
+      .hamb{display:block}
+      .cards{grid-template-columns:1fr}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      .topbar{padding:10px}
+      .hero{padding:22px 16px}
+      .hero-left h2{font-size:28px}
+    }
+
+    /* helpers */
+    .badge{background:linear-gradient(90deg,var(--primary),var(--primary-2));color:white;padding:6px 10px;border-radius:999px;font-weight:700}
+
+  </style>
+</head>
+<body data-theme="light">
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <div class="logo" id="logo">DSU</div>
+      <div>
+        <h1 id="brandTitle">Dayananda Sagar University</h1>
+        <div class="muted" style="font-size:12px">Innovation • Research • Community</div>
+      </div>
+    </div>
+
+    <nav id="mainNav">
+      <a href="#about">About</a>
+      <a href="#programs">Programs</a>
+      <a href="#admissions">Admissions</a>
+      <a href="#research">Research</a>
+      <a href="#news">News</a>
+      <a class="cta" href="#apply">Apply</a>
+    </nav>
+
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="theme-toggle" role="group" aria-label="Theme toggle">
+        <div class="icon sun" id="themeIcon" title="Toggle theme">🌙</div>
+      </div>
+      <button class="hamb" aria-label="menu" onclick="toggleMenu()">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="bg-anim" aria-hidden="true">
+        <!-- animated gradient blobs -->
+        <svg width="100%" height="100%" style="position:absolute;left:-10%;top:-10%;z-index:0;opacity:0.14;filter:blur(40px)">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="var(--primary)"/><stop offset="1" stop-color="var(--primary-2)"/></linearGradient>
+          </defs>
+          <circle cx="20%" cy="30%" r="220" fill="url(#g1)"></circle>
+          <circle cx="85%" cy="10%" r="180" fill="rgba(255,122,89,0.12)"></circle>
+        </svg>
+      </div>
+
+      <div class="hero-left">
+        <div class="fade-in stagger-1">
+          <h2>Shaping leaders for a changing world — learn, innovate, and lead.</h2>
+          <p>Undergraduate, postgraduate and research programs with global partnerships and industry-aligned curriculum. Explore campuses, scholarships and more.</p>
+
+          <div class="search-card tilt" id="searchCard">
+            <form onsubmit="event.preventDefault();searchPrograms()">
+              <div class="search-row">
+                <input id="q" placeholder="Search programs, courses, departments..." aria-label="Search" />
+                <button type="submit" class="btn" style="background:var(--primary);color:white">Search</button>
+              </div>
+            </form>
+            <div style="margin-top:8px;color:var(--muted);font-size:13px">Popular: Computer Science • MBA • Mechanical • Data Science</div>
+          </div>
+
+          <div style="margin-top:22px" class="cards">
+            <div class="card fade-in stagger-2">
+              <h3>Undergraduate</h3>
+              <p class="muted">B.Sc, B.A, B.Com — flexible minors and industry projects.</p>
+            </div>
+            <div class="card fade-in stagger-3">
+              <h3>Postgraduate</h3>
+              <p class="muted">M.Tech, M.A, MBA — cutting-edge curriculum & research tracks.</p>
+            </div>
+            <div class="card fade-in stagger-2">
+              <h3>Research</h3>
+              <p class="muted">Interdisciplinary centers and funded labs for innovation.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-right" aria-hidden="true" id="heroRight">
+        <div class="hero-overlay">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Campus Life</div>
+            <div style="font-size:12px;background:rgba(0,0,0,0.22);padding:6px 10px;border-radius:8px">Virtual Tour</div>
+          </div>
+
+          <div style="margin-top:18px" class="stats">
+            <div class="stat pop">
+              <div style="font-size:18px;font-weight:800">18k+</div>
+              <div style="font-size:12px" class="muted">Students</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:18px;font-weight:800">320+</div>
+              <div style="font-size:12px" class="muted">Faculty</div>
+            </div>
+            <div class="stat">
+              <div style="font-size:18px;font-weight:800">150+</div>
+              <div style="font-size:12px" class="muted">Programs</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- About -->
+    <section class="container" id="about">
+      <div style="display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:center">
+        <div>
+          <h2 class="fade-in">About Dayananda Sagar University</h2>
+          <p class="muted">Founded to create a learning environment that fosters discovery, entrepreneurship and social impact. We combine rigorous academics with hands-on research to prepare students for real-world challenges.</p>
+
+          <div style="display:flex;gap:12px;margin-top:16px">
+            <div class="card fade-in" style="padding:12px;border-radius:12px;min-width:140px;text-align:center">
+              <div style="font-weight:800">250+</div>
+              <div class="muted" style="font-size:13px">Programs</div>
+            </div>
+            <div class="card fade-in" style="padding:12px;border-radius:12px;min-width:140px;text-align:center">
+              <div style="font-weight:800">15k+</div>
+              <div class="muted" style="font-size:13px">Alumni</div>
+            </div>
+            <div class="card fade-in" style="padding:12px;border-radius:12px;min-width:140px;text-align:center">
+              <div style="font-weight:800">120+</div>
+              <div class="muted" style="font-size:13px">Partners</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card fade-in">
+            <h4>Message from the Vice-Chancellor</h4>
+            <p class="muted">We welcome curious minds and future leaders. Our campus encourages interdisciplinary collaboration, real-world projects and global exposure.</p>
+            <div style="height:8px"></div>
+            <a class="btn" href="#apply" style="background:var(--primary);color:white">Apply Now</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Programs -->
+    <section class="container" id="programs">
+      <h2 class="fade-in">Programs</h2>
+      <p class="muted">Undergraduate, postgraduate and doctoral programs across STEM, Arts, Management and Design.</p>
+      <div style="height:16px"></div>
+      <div class="cards">
+        <div class="card tilt">
+          <h3>Computer Science</h3>
+          <p class="muted">AI, Data Science, Systems, Cybersecurity.</p>
+        </div>
+        <div class="card tilt">
+          <h3>Business & Management</h3>
+          <p class="muted">MBA, Finance, Operations, Entrepreneurship.</p>
+        </div>
+        <div class="card tilt">
+          <h3>Engineering</h3>
+          <p class="muted">Mechanical, Electrical, Civil & Mechatronics.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- News -->
+    <section class="container" id="news">
+      <h2 class="fade-in">News & Events</h2>
+      <div style="height:12px"></div>
+      <div class="grid-2">
+        <div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <h3 style="margin:0">Latest Announcements</h3>
+              <div class="muted" style="font-size:13px">Updated recently</div>
+            </div>
+            <div style="height:12px"></div>
+            <div class="marquee" aria-hidden="true"><span>Admissions open for 2026 • New AI Research Lab inaugurated • DSU ranked in top universities</span></div>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="card">
+            <h4>Featured News</h4>
+            <div class="news-item">
+              <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop&s=6b3b9a1d7a3d3b7b2a0f7ea3ff0fe7a2" alt="news">
+              <div>
+                <strong>New Research Centre for Sustainable Energy</strong>
+                <div class="muted" style="font-size:13px">Funding of $3.4M announced for cross-lab projects.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card fade-in">
+            <h4>Upcoming Events</h4>
+            <ul style="padding-left:18px;margin:8px 0 0;color:var(--muted)">
+              <li>Convocation — Jan 15, 2026</li>
+              <li>Tech Symposium — Dec 03, 2025</li>
+              <li>Open House — Mar 20, 2026</li>
+            </ul>
+          </div>
+
+          <div style="height:12px"></div>
+
+          <div class="card fade-in">
+            <h4>Quick Links</h4>
+            <ul style="padding-left:18px;margin:8px 0 0;color:var(--muted)">
+              <li><a href="#apply">Apply</a></li>
+              <li><a href="#admissions">Scholarships</a></li>
+              <li><a href="#research">Research</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Admissions CTA -->
+    <section class="container" id="admissions">
+      <div class="card" style="display:flex;gap:18px;align-items:center;justify-content:space-between">
+        <div>
+          <h3 style="margin:0 0 6px">Admissions open for 2026</h3>
+          <p class="muted" style="margin:0">Apply to undergraduate and postgraduate programs. Scholarships available for meritorious students.</p>
+        </div>
+        <div>
+          <a class="btn" href="#apply" style="background:var(--primary);color:white">Start Application</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="container" id="contact">
+      <h2 class="fade-in">Get in touch</h2>
+      <div style="height:12px"></div>
+      <div class="grid-2">
+        <div class="card fade-in">
+          <h4>Visit Campus</h4>
+          <p class="muted">123 University Avenue, City, Country<br/>Mon–Fri, 9am–5pm</p>
+          <div style="height:10px"></div>
+          <iframe style="width:100%;height:200px;border-radius:10px;border:0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3"></iframe>
+        </div>
+        <div class="card fade-in">
+          <h4>Contact Form</h4>
+          <form onsubmit="event.preventDefault();alert('Thank you — we will respond shortly')">
+            <div style="display:flex;gap:8px;margin-bottom:8px">
+              <input placeholder="Your name" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(11,95,255,0.06)"/>
+              <input placeholder="Email" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(11,95,255,0.06)"/>
+            </div>
+            <textarea placeholder="Message" style="width:100%;padding:10px;border-radius:8px;border:1px solid rgba(11,95,255,0.06);height:90px"></textarea>
+            <div style="height:10px"></div>
+            <button class="btn" type="submit" style="background:var(--primary);color:white">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <h3>Dayananda Sagar University</h3>
+        <div class="muted">Excellence in teaching, research & innovation</div>
+      </div>
+      <div>
+        <h4>Academics</h4>
+        <ul class="muted" style="padding-left:18px;margin-top:6px">
+          <li>Undergraduate</li>
+          <li>Postgraduate</li>
+          <li>Research</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Campus</h4>
+        <ul class="muted" style="padding-left:18px;margin-top:6px">
+          <li>Facilities</li>
+          <li>Housing</li>
+          <li>Clubs</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <div class="muted">admissions@dsu.edu<br/>+91 80 1234 5678</div>
+        <div style="height:10px"></div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center">f</div>
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center">in</div>
+          <div style="width:36px;height:36px;border-radius:8px;background:rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:center">t</div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    function toggleMenu(){
+      const nav = document.getElementById('mainNav');
+      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    // Search (demo)
+    function searchPrograms(){
+      const q = document.getElementById('q').value.trim();
+      if(!q) return alert('Try searching for a program, e.g. Computer Science');
+      alert('Searching for: '+q+' (demo)');
+    }
+
+    // Theme toggle (light/dark) with animated transition
+    const themeIcon = document.getElementById('themeIcon');
+    function setTheme(t){
+      document.body.setAttribute('data-theme', t);
+      // animated icon swap
+      if(t === 'dark'){
+        themeIcon.classList.remove('sun');
+        themeIcon.classList.add('moon');
+        themeIcon.textContent = '☀️';
+      } else {
+        themeIcon.classList.remove('moon');
+        themeIcon.classList.add('sun');
+        themeIcon.textContent = '🌙';
+      }
+      // animate subtle background change by toggling a CSS variable (already transitions)
+      localStorage.setItem('site-theme', t);
+    }
+    // initialize
+    const saved = localStorage.getItem('site-theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    setTheme(saved);
+
+    themeIcon.addEventListener('click', ()=>{
+      const next = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      // animate header/logo when theme changes
+      document.getElementById('logo').classList.add('pulse');
+      setTimeout(()=>document.getElementById('logo').classList.remove('pulse'), 900);
+
+      // animate hero-right overlay color shift with small fade
+      const hr = document.getElementById('heroRight');
+      hr.style.transition = 'opacity 260ms ease';
+      hr.style.opacity = '0.6';
+      setTimeout(()=>{ hr.style.opacity = '1'; }, 260);
+
+      setTheme(next);
+    });
+
+    // Shrink header on scroll
+    const topbar = document.getElementById('topbar');
+    window.addEventListener('scroll', ()=>{
+      if(window.scrollY > 20) topbar.classList.add('shrink'); else topbar.classList.remove('shrink');
+    });
+
+    // Staggered intersection animations & parallax
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('fade-in');
+          // small parallax: move hero right image slightly
+          if(e.target.id === 'heroRight'){
+            e.target.style.transform = 'translateY(-6px)';
+            setTimeout(()=>e.target.style.transform = 'none', 700);
+          }
+        }
+      });
+    },{threshold:0.12});
+
+    document.querySelectorAll('.card, h2, .hero-left > .fade-in, .hero-right, .stat').forEach(el=>io.observe(el));
+
+    // card tilt follow cursor (desktop only)
+    const cards = document.querySelectorAll('.tilt');
+    cards.forEach(card=>{
+      card.addEventListener('mousemove', e=>{
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width/2;
+        const y = e.clientY - rect.top - rect.height/2;
+        const rotX = (y/rect.height) * -6; const rotY = (x/rect.width) * 6;
+        card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      });
+      card.addEventListener('mouseleave', ()=>{ card.style.transform = ''; });
+    });
+
+    // accessibility: focus style and keyboard quick search (press 's')
+    document.addEventListener('keydown', e=>{ if(e.key === 's') document.getElementById('q').focus(); });
+
+  </script>
+</body>
+</html>
